@@ -10,11 +10,11 @@ export const API = {
       if (!this.isLoading) {
         this.isLoading = true;
         await APIGetBlogs(this.domain).then((res) => {
-          console.log('Data Res', res);
           if (res.status == 200) {
             const { data, pagy } = res.data;
-            this.$store.commit('Blogs/UPDATE_LIST_BLOG', data);
+            this.$store.commit('Blogs/UPDATE_LIST_BLOGS', data);
             this.$store.commit('Blogs/UPDATE_PAG', pagy);
+            this.$eventBus.$emit('UPDATE_LIST_BLOGS', data);
           } else {
             alert('Error');
           }

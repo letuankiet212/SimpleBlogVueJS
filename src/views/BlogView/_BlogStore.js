@@ -1,11 +1,11 @@
 const state = {
-  listBlog: [],
+  listBlogs: [],
   pag: null
 };
 
 const mutations = {
-  UPDATE_LIST_BLOG(state, value) {
-    state.listBlog = value;
+  UPDATE_LIST_BLOGS(state, value) {
+    state.listBlogs = value;
   },
   UPDATE_PAG(state, value) {
     state.pag = value;
