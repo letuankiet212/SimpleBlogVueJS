@@ -20,8 +20,13 @@
 
 <script>
 import LayoutDefault from '@/layouts/layout-default.vue';
+import { API } from './_BlogScript';
 export default {
   name: 'HomeView',
-  components: { LayoutDefault }
+  components: { LayoutDefault },
+  mixins: [API],
+  created() {
+    this.GetBlogs();
+  }
 };
 </script>
