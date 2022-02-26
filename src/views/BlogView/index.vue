@@ -28,6 +28,34 @@
     </div>
     <div class="container card" id="list-blogs">
       <div class="p-3 shadow bg-body rounded row" v-if="listBlogs.length > 0 && !isLoading">
+        <div class="col-4">
+          <form class="card shadow" @submit.prevent="handleSubmit()" method="POST">
+            <img :src="formBlog.imagePreview" alt="" />
+            <div class="card-body">
+              <input
+                type="file"
+                name="imageBlog"
+                id="imageBlog"
+                @change="handleUpload"
+                class="p-1"
+              />
+              <input
+                type="text"
+                id="titleBlog"
+                class="border mb-1 p-1"
+                placeholder="Title Blog"
+                v-model="formBlog.nameBlog"
+                required
+              />
+              <textarea
+                id="contentBlog"
+                class="border p-1"
+                v-model="formBlog.contentBlog"
+              ></textarea>
+              <button type="submit" class="btn btn-primary mt-2 mx-auto d-block">Add Blog</button>
+            </div>
+          </form>
+        </div>
         <div class="col-4" v-for="(blog, index) in listBlogs" :key="'blog' + index">
           <div class="card">
             <img :src="blog.image.url" class="card-img-top" :alt="blog.title" />
@@ -54,6 +82,7 @@ import PaginationComponent from '@/components/PaginationComponent';
 import SelectComponent from '@/components/SelectComponent';
 import { API } from './_BlogScript';
 import Navbar from '@/components/Navbar';
+import { previewImgUpload } from '@/helpers/Image';
 
 export default {
   name: 'HomeView',
@@ -70,12 +99,20 @@ export default {
       { name: 'Update', value: 'updated_at' }
     ],
     sort_by: 'created_at',
-    search: ''
+    search: '',
+    formBlog: {
+      nameBlog: 'The Great Dictator',
+      contentBlog:
+        'Est non voluptas. Vitae repudiandae quo. Omnis nostrum ut.\nIn illum a. Est nemo quibusdam. Blanditiis praesentium at.\nQui animi est. Voluptate iure aut. Animi asperiores debitis',
+      imagePreview: 'https://api-placeholder.herokuapp.com/images/fallback/default.png',
+      imageFileBlog: null
+    }
   }),
   created() {
-    this.GetBlogs({ page: this.page, sort_by: this.sort_by });
+    this.GetBlogs({ page: this.page, sort_by: this.sort_by, sort_direction: 'desc' });
   },
   methods: {
+    previewImgUpload,
     handleChange() {
       switch (this.sortValue) {
         case '2':
@@ -97,6 +134,20 @@ export default {
     updateSort(e) {
       this.sort_by = e;
       this.GetBlogs({ page: this.page, sort_by: this.sort_by, search: this.search });
+    },
+
+    handleUpload(e) {
+      this.formBlog.imageFileBlog = e.target.files[0] || e.dataTransfer.files[0];
+
+      this.formBlog.imagePreview = this.previewImgUpload(e);
+    },
+    handleSubmit() {
+      const { nameBlog, contentBlog, imageFileBlog } = this.formBlog;
+      const fd = new FormData();
+      fd.append('blog[image]', imageFileBlog);
+      fd.append('blog[title]', nameBlog);
+      fd.append('blog[content]', contentBlog);
+      this.CreateBlog(fd);
     }
   },
   mounted() {
@@ -104,7 +155,6 @@ export default {
       this.listBlogs = res;
     });
   },
-
   computed: {
     page() {
       const { infoPage } = this;
