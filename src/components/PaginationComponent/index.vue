@@ -2,28 +2,36 @@
   <ul class="d-flex">
     <li
       class="page-item"
-      :class="index === infoPage.page ? 'active' : ''"
-      v-for="index in fetchPageNumber"
+      :class="index + 1 === infoPage.page ? 'active' : ''"
+      v-for="(value, index) in fetchPageNumber"
       :key="'page' + index"
     >
-      <a class="page-link" href="#">{{ index }}</a>
+      <a class="page-link" @click="handleClick(value)">{{ value }}</a>
     </li>
   </ul>
 </template>
 
 <script>
-export default {
-  name: 'SearchComponent',
-  methods: {
-    range(from, to, step = 1) {
-      let i = from;
-      const range = [];
-      while (i <= to) {
-        range.push(i);
-        i += step;
-      }
+import { range } from '@/helpers/Array.js';
 
-      return range;
+export default {
+  name: 'PaginationComponent',
+  methods: {
+    range,
+    handleClick(value) {
+      let result = this.infoPage.page;
+      switch (value) {
+        case '>':
+          result += 1;
+          break;
+        case '<':
+          result -= 1;
+          break;
+        default:
+          result = value;
+          break;
+      }
+      this.$emit('updatePag', result);
     }
   },
   computed: {

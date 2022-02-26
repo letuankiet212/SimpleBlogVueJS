@@ -1,8 +1,9 @@
 import request from '@/helpers/Request';
 
-export function APIGetBlogs(domain) {
+export function APIGetBlogs(domain, params) {
   return request({
     url: domain + 'blogs',
-    method: 'get'
+    method: 'get',
+    params: params
   });
 }

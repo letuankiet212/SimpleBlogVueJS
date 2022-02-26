@@ -6,10 +6,10 @@ export const API = {
     isLoading: false
   }),
   methods: {
-    async GetBlogs() {
+    async GetBlogs(data = {}) {
       if (!this.isLoading) {
         this.isLoading = true;
-        await APIGetBlogs(this.domain).then((res) => {
+        await APIGetBlogs(this.domain, data).then((res) => {
           if (res.status == 200) {
             const { data, pagy } = res.data;
             this.$store.commit('Blogs/UPDATE_LIST_BLOGS', data);
@@ -18,6 +18,7 @@ export const API = {
           } else {
             alert('Error');
           }
+          this.isLoading = false;
         });
       }
       return false;
