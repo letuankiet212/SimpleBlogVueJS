@@ -23,3 +23,18 @@ export function APICreateBlog(domain, params) {
     data: params
   });
 }
+
+export function APIDelBlog(domain, id) {
+  return request({
+    url: domain + 'blogs/' + id,
+    method: 'delete'
+  });
+}
+
+export function APIEditBlog(domain, id, dataObj) {
+  return request({
+    url: domain + 'blogs/' + id,
+    method: 'put',
+    data: dataObj
+  });
+}

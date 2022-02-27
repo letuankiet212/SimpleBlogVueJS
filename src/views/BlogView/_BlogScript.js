@@ -1,4 +1,4 @@
-import { APICreateBlog, APIGetBlog, APIGetBlogs } from './_BlogApi';
+import { APIEditBlog, APIDelBlog, APICreateBlog, APIGetBlog, APIGetBlogs } from './_BlogApi';
 
 export const API = {
   data: () => ({
@@ -50,7 +50,29 @@ export const API = {
           }
         });
       }
-      // return false;
+      return false;
+    },
+    async EditBlog(id, dataObj) {
+      if (!this.isLoading) {
+        this.isLoading = true;
+        await APIEditBlog(this.domain, id, dataObj).then((res) => {
+          console.log(res);
+        });
+      }
+    },
+    async DeleteBlog(id) {
+      if (!this.isLoading) {
+        this.isLoading = true;
+        await APIDelBlog(this.domain, id).then((res) => {
+          this.isLoading = false;
+          if (res.status == 204) {
+            this.GetBlogs({ page: 1, sort_direction: 'desc', sort_by: 'created_at' });
+          } else {
+            alert('Error');
+          }
+        });
+      }
+      return false;
     }
   }
 };

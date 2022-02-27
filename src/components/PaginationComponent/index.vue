@@ -38,7 +38,7 @@ export default {
     fetchPageNumber() {
       if (this.infoPage) {
         const { pages, page } = this.infoPage;
-        const pageNeighbours = 2;
+        const pageNeighbours = 1;
 
         const totalNumber = pageNeighbours * 2 + 3;
         const totalBlocks = totalNumber + 2;
