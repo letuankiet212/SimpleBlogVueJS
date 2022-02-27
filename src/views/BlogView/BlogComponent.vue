@@ -1,10 +1,10 @@
 <template>
   <div class="card">
-    <img :src="blog.image.url" class="card-img-top" :alt="blog.title" />
+    <img :src="form.image" class="card-img-top blog-img" :alt="form.title" />
     <div class="card-body" v-if="!isEdit">
-      <h5 class="card-title">{{ blog.title }}</h5>
+      <h5 class="card-title">{{ form.title }}</h5>
       <p class="card-text">
-        {{ blog.content }}
+        {{ form.content }}
       </p>
       <div class="btn btn-primary mt-2" @click="handleEdit()">Edit</div>
     </div>
@@ -16,7 +16,7 @@
       <div class="grp-button d-flex justify-content-between align-items-center mt-2">
         <div>
           <div class="btn btn-primary" @click="handleConfirm(blog.id)">Submit</div>
-          <div class="btn btn-primary" @click="handleClick()">Cancel</div>
+          <div class="btn btn-primary" @click="handleCancel()">Cancel</div>
         </div>
         <div class="btn btn-primary" @click="handleDel(blog.id)">Delete</div>
       </div>
@@ -32,24 +32,38 @@ export default {
   mixins: [API],
   data: () => ({
     isEdit: false,
+    form: {
+      title: '',
+      content: '',
+      image: ''
+    },
     formEdit: {
       nameBlog: '',
       contentBlog: '',
       imageFileBlog: null
     }
   }),
+  created() {
+    this.fillData({
+      title: this.blog.title,
+      content: this.blog.content,
+      image: this.blog.image.url
+    });
+  },
   methods: {
+    fillData(dataObj) {
+      this.form = Object.assign({}, dataObj);
+    },
     handleEdit() {
       this.isEdit = true;
       this.formEdit = {
-        nameBlog: this.blog.title,
-        contentBlog: this.blog.content
+        nameBlog: this.form.title,
+        contentBlog: this.form.content
       };
     },
     handleUpload(e) {
       this.formEdit.imageFileBlog = e.target.files[0] || e.dataTransfer.files[0];
     },
-
     handleConfirm(id) {
       const { nameBlog, contentBlog, imageFileBlog } = this.formEdit;
       const fd = new FormData();
@@ -65,6 +79,27 @@ export default {
         this.isEdit = false;
         this.DeleteBlog(id);
       }
+    }
+  },
+  mounted() {
+    this.$eventBus.$on('UPDATE_BLOG', (res) => {
+      if (res.id == this.blog.id) {
+        this.fillData({
+          title: res.title,
+          content: res.content,
+          image: res.image.url
+        });
+      }
+      return false;
+    });
+  },
+  watch: {
+    blog() {
+      this.fillData({
+        title: this.blog.title,
+        content: this.blog.content,
+        image: this.blog.image.url
+      });
     }
   }
 };

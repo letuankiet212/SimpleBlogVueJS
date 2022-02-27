@@ -5,10 +5,20 @@ import Blogs from '@/views/BlogView/_BlogStore';
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-  state: {},
+  state: {
+    isLoading: false
+  },
   getters: {},
-  mutations: {},
-  actions: {},
+  mutations: {
+    updateLoadingState(state, flag) {
+      state.isLoading = flag;
+    }
+  },
+  actions: {
+    onLoading(context, flag) {
+      context.commit('updateLoadingState', flag);
+    }
+  },
   modules: {
     Blogs
   }

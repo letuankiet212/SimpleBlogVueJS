@@ -1,7 +1,7 @@
 <template>
   <layout-default>
-    <div class="container card">
-      <div class="row shadow bg-body rounded">
+    <div class="container">
+      <div class="row">
         <Navbar @searchData="searchBlog"></Navbar>
       </div>
     </div>
@@ -29,12 +29,26 @@
     <div class="container card" id="list-blogs">
       <div class="p-3 shadow bg-body rounded row" v-if="listBlogs.length > 0 && !isLoading">
         <blog-add></blog-add>
-        <div class="col-4" v-for="(blog, index) in listBlogs" :key="'blog' + index">
+        <div
+          class="col-12 col-md-6 col-lg-4 mb-5"
+          v-for="(blog, index) in listBlogs"
+          :key="'blog' + index"
+        >
           <blog-component :blog="blog"></blog-component>
         </div>
       </div>
       <div class="p-3 shadow bg-body rounded row" v-else>
-        <div class="col-12">Loading</div>
+        <div
+          class="col-12 col-md-6 col-lg-4 mb-5"
+          v-for="index in 6"
+          :key="'placeHolderShimmer' + index"
+        >
+          <div class="animated-background blog-img"></div>
+          <div class="card-body border">
+            <h5 class="card-title animated-background"></h5>
+            <p class="card-text animated-background"></p>
+          </div>
+        </div>
       </div>
     </div>
   </layout-default>
@@ -103,6 +117,7 @@ export default {
   },
   mounted() {
     this.$eventBus.$on('UPDATE_LIST_BLOGS', (res) => {
+      console.log('ello');
       this.listBlogs = res;
     });
   },

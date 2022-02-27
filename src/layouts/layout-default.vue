@@ -1,5 +1,5 @@
 <template>
-  <div class="layout-default mx-auto">
+  <div class="layout-default mx-auto mt-5">
     <div id="wrapper">
       <slot></slot>
     </div>

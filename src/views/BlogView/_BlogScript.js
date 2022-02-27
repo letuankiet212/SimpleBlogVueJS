@@ -6,6 +6,12 @@ export const API = {
     isLoading: false
   }),
   methods: {
+    callNote(text) {
+      if (this.isLoading) {
+        this.$eventBus.$emit('SEND_MSG', 'Loading...');
+      }
+      this.$eventBus.$emit('SEND_MSG', text);
+    },
     async GetBlogs(dataObj = {}) {
       if (!this.isLoading) {
         this.isLoading = true;
@@ -15,8 +21,9 @@ export const API = {
             this.$store.commit('Blogs/UPDATE_LIST_BLOGS', data);
             this.$store.commit('Blogs/UPDATE_PAG', pagy);
             this.$eventBus.$emit('UPDATE_LIST_BLOGS', data);
+            this.callNote('Loading List Blogs Success');
           } else {
-            alert('Error');
+            this.callNote('Error');
           }
           this.isLoading = false;
         });
@@ -45,6 +52,7 @@ export const API = {
           this.isLoading = false;
           if (res.status == 201) {
             this.GetBlogs({ page: 1, sort_direction: 'desc', sort_by: 'created_at' });
+            this.callNote('Create Blog Success');
           } else {
             alert('Error');
           }
@@ -56,9 +64,16 @@ export const API = {
       if (!this.isLoading) {
         this.isLoading = true;
         await APIEditBlog(this.domain, id, dataObj).then((res) => {
-          console.log(res);
+          this.isLoading = false;
+          if (res.status == 200) {
+            this.callNote('Edit Blog Success');
+            this.$eventBus.$emit('UPDATE_BLOG', res.data);
+          } else {
+            this.callNote('Error');
+          }
         });
       }
+      return false;
     },
     async DeleteBlog(id) {
       if (!this.isLoading) {

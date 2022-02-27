@@ -1,7 +1,7 @@
 <template>
-  <div class="col-4">
+  <div class="col-12 col-md-6 col-lg-4 mb-5">
     <form class="card shadow" @submit.prevent="handleSubmit()">
-      <img :src="formBlog.imagePreview" alt="" />
+      <img :src="formBlog.imagePreview" alt="" class="blog-img" />
       <div class="card-body">
         <input type="file" name="imageBlog" id="imageBlog" @change="handleUpload" class="p-1" />
         <input
@@ -27,9 +27,8 @@ export default {
   mixins: [API],
   data: () => ({
     formBlog: {
-      nameBlog: 'The Great Dictator',
-      contentBlog:
-        'Est non voluptas. Vitae repudiandae quo. Omnis nostrum ut.\nIn illum a. Est nemo quibusdam. Blanditiis praesentium at.\nQui animi est. Voluptate iure aut. Animi asperiores debitis',
+      nameBlog: 'My Blog',
+      contentBlog: 'My Blog',
       imagePreview: 'https://api-placeholder.herokuapp.com/images/fallback/default.png',
       imageFileBlog: null
     }
