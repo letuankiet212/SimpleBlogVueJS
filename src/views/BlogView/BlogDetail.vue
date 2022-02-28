@@ -37,7 +37,7 @@ export default {
     toDateString
   },
   created() {
-    this.GetBlog();
+    this.GetBlog(this.$route.params.id);
   },
   mounted() {
     this.$eventBus.$on('UPDATE_DETAIL_BLOG', (res) => {

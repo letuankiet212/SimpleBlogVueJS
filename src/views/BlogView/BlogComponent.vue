@@ -1,8 +1,12 @@
 <template>
   <div class="card">
-    <img :src="form.image" class="card-img-top blog-img" :alt="form.title" />
+    <router-link :to="`/blog-detail/${blog.id}`">
+      <img :src="form.image" class="card-img-top blog-img" :alt="form.title" />
+    </router-link>
     <div class="card-body" v-if="!isEdit">
-      <h5 class="card-title">{{ form.title }}</h5>
+      <router-link :to="`/blog-detail/${blog.id}`">
+        <h5 class="card-title">{{ form.title }}</h5>
+      </router-link>
       <p class="card-text">
         {{ form.content }}
       </p>
